@@ -6,7 +6,7 @@ public class StaticItem : MonoBehaviour
 {
     public string ItemName;
     private bool _isFixed;
-    private Item _parentPart;
+    private StaticItem _parentPart;
 
     private Renderer _renderer;
     private Material hintMaterial;
@@ -27,7 +27,7 @@ public class StaticItem : MonoBehaviour
         hintMaterial = new Material(defaultMaterial);
         hintMaterial.color = new Color(0, 1, 0);
         if (transform.parent == null) return;
-        if (!transform.parent.TryGetComponent(out Item item)) return;
+        if (!transform.parent.TryGetComponent(out StaticItem item)) return;
         _parentPart = item;
     }
     private void OnTriggerEnter(Collider other)
@@ -53,8 +53,7 @@ public class StaticItem : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         if (_isFixed) return;
-        if (!other.TryGetComponent(out Item item)) return;
-        if (item.CheckStatic()) return;
+        if (!other.TryGetComponent(out DynamicItem item)) return;
 
         HideHint();
         item.ClearFixPart();
